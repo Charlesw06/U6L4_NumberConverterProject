@@ -19,27 +19,26 @@ class ConverterRunner {
         System.out.print("Enter your number: ");
         String number = s.nextLine();
 
-        boolean correctNum = false;
-
-        while (!correctNum) {
-            if (base == 2) {
-
-            }
-            if (base == 8) {
-
-            }
-            if (base == 10) {
-
-            }
-        }
-
         int n = Integer.parseInt(number);
 
         s.close();
 
         NumberConverter nc = new NumberConverter(n, base);
         int[] digits = nc.getDigits();
-        System.out.println("\n\nDigit array: " + Arrays.toString(digits));
+        System.out.println("\nDigit array: " + Arrays.toString(digits));
         System.out.println("Number: " + nc.displayOriginalNumber());
+
+        if (base == 2) {
+            System.out.println("Decimal Number: " + nc.convertToDecimal());
+            System.out.println("Octal Number: " + nc.convertToOctal());
+        }
+        if (base == 8) {
+            System.out.println("Decimal Number: " + nc.convertToDecimal());
+            System.out.println("Binary Number: " + nc.convertToBinary());
+        }
+        if (base == 10) {
+            System.out.println("Binary Number: " + nc.convertToBinary());
+            System.out.println("Octal Number: " + nc.convertToOctal());
+        }
     }
 }
