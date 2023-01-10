@@ -1,6 +1,7 @@
 public class NumberConverter {
     int[] digits;
     int base;
+    final String digitMap = "0123456789ABCDEF";
 
     public NumberConverter(int number, int base) {
         String numberAsString = Integer.toString(number);
@@ -26,58 +27,39 @@ public class NumberConverter {
         return digits;
     }
 
-    public int convertToDecimal() {
-        int numInDecimal = 0;
-        if ((base == 2) || (base == 8) || (base == 10)) {
-            int pow = digits.length;
-            for (int i = 0; i < digits.length; i++) {
-                pow--;
-                numInDecimal += digits[i] * Math.pow(base, pow);
+    public int convertToBase(int num[], int base, int resultBase) {
+        int result = 0;
+        String number = displayOriginalNumber();
+        int pow = num.length - 1;
+        for (int i = 0; i < num.length; i++) {
+            result += digitMap.indexOf(number.charAt(i)) * Math.pow(base, number.length() - i - 1);
+        }
+        boolean powFound = false;
+        int currentPow = 0;
+        int last = 0;
+        while (!powFound) {
+            if (Math.pow(2, currentPow) > result) {
+                powFound = true;
+            }
+            else {
+                currentPow++;
             }
         }
-        return numInDecimal;
+        for (int i = currentPow - 1; i >= 0 ; i--) {
+            last += Integer.parseInt(number) / (int) (Math.pow(base, i));
+        }
+        return last;
+    }
+    public int convertToDecimal() {
+        return convertToBase(digits, base, 10);
     }
 
     public int convertToBinary() {
-        int numInDecimal = convertToDecimal();
-        String numInBinary = "";
-        if ((base == 8) || (base == 10) || (base == 2)) {
-            boolean powFound = false;
-            int currentPow = 0;
-            while (!powFound) {
-                if (Math.pow(2, currentPow) > numInDecimal) {
-                    powFound = true;
-                }
-                else {
-                    currentPow++;
-                }
-            }
-            for (int i = currentPow - 1; i >= 0 ; i--) {
-                numInBinary += numInDecimal / (int) (Math.pow(2, i));
-            }
-        }
-        return Integer.parseInt(numInBinary);
+        return convertToBase(digits, base, 2);
     }
 
     public int convertToOctal() {
-        int numInDecimal = convertToDecimal();
-        String numInOctal = "";
-        if ((base == 2) || (base == 10) || (base == 8)) {
-            boolean powFound = false;
-            int currentPow = 0;
-            while (!powFound) {
-                if (Math.pow(2, currentPow) > numInDecimal) {
-                    powFound = true;
-                }
-                else {
-                    currentPow++;
-                }
-            }
-            for (int i = currentPow - 1; i >= 0 ; i--) {
-                numInOctal += numInDecimal / (int) (Math.pow(8, i));
-            }
-        }
-        return Integer.parseInt(numInOctal);
+        return convertToBase(digits, base, 8);
     }
 }
 
