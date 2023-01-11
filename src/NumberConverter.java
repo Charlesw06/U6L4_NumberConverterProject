@@ -28,17 +28,18 @@ public class NumberConverter {
     }
 
     public int convertToBase(int num[], int base, int resultBase) {
-        int result = 0;
+        int numInDecimal = 0;
         String number = displayOriginalNumber();
-        int pow = num.length - 1;
         for (int i = 0; i < num.length; i++) {
-            result += digitMap.indexOf(number.charAt(i)) * Math.pow(base, number.length() - i - 1);
+            numInDecimal += digitMap.indexOf(number.charAt(i)) * Math.pow(base, number.length() - i - 1);
         }
         boolean powFound = false;
         int currentPow = 0;
-        int last = 0;
+        String result = "";
+        int tempNum = Integer.parseInt(number);
+        int newDigit = 0;
         while (!powFound) {
-            if (Math.pow(2, currentPow) > result) {
+            if (Math.pow(base, currentPow) > numInDecimal) {
                 powFound = true;
             }
             else {
@@ -46,9 +47,11 @@ public class NumberConverter {
             }
         }
         for (int i = currentPow - 1; i >= 0 ; i--) {
-            last += Integer.parseInt(number) / (int) (Math.pow(base, i));
+            newDigit = tempNum / (int) (Math.pow(base, i));
+            result += newDigit;
+            tempNum -= newDigit * (int) (Math.pow(base, i));
         }
-        return last;
+        return Integer.parseInt(result);
     }
     public int convertToDecimal() {
         return convertToBase(digits, base, 10);
