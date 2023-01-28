@@ -33,6 +33,9 @@ class ConverterRunner {
                     validNum = false;
                 }
             }
+            if (number.equals("")) {
+                validNum = false;
+            }
             if (!validNum) {
                 System.out.print("Please enter a valid number for the base: ");
                 number = s.nextLine();
@@ -45,7 +48,7 @@ class ConverterRunner {
         System.out.println("Number: " + nc.displayOriginalNumber());
 
         if (specialConvert) {
-            System.out.print("Enter a base to convert the number to (1 to 64): ");
+            System.out.print("Enter a base to convert the number to (2 to 64): ");
             Scanner sc = new Scanner(System.in);
             String newBase = sc.nextLine();
             boolean validBase = false;
@@ -58,7 +61,7 @@ class ConverterRunner {
                     }
                 }
                 if (validBase) {
-                    while ((Integer.parseInt(newBase) < 1) || (Integer.parseInt(newBase) > 64)) {
+                    if ((newBase.equals("")) || (Integer.parseInt(newBase) <= 1) || (Integer.parseInt(newBase) > 64)) {
                         validBase = false;
                     }
                 }
