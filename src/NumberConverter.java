@@ -1,15 +1,13 @@
 public class NumberConverter {
-    int[] digits;
+    String[] digits;
     int base;
-    final String digitMap = "0123456789ABCDEF";
+    final static String digitMap = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/";
 
-    public NumberConverter(int number, int base) {
-        String numberAsString = Integer.toString(number);
-        digits = new int[numberAsString.length()];
-        for (int i = 0; i < numberAsString.length(); i++) {
-            String single = numberAsString.substring(i,i+1);
-            int d = Integer.parseInt(single);
-            digits[i] = d;
+    public NumberConverter(String number, int base) {
+        digits = new String[number.length()];
+        for (int i = 0; i < number.length(); i++) {
+            String single = number.substring(i,i+1);
+            digits[i] = single;
         }
         this.base = base;
     }
@@ -23,46 +21,37 @@ public class NumberConverter {
         return o;
     }
 
-    public int[] getDigits() {
+    public String[] getDigits() {
         return digits;
     }
 
-    public int convertToBase(int num[], int base, int resultBase) {
+    public String convertToBase(int newBase) {
         int numInDecimal = 0;
-        String number = displayOriginalNumber();
-        for (int i = 0; i < num.length; i++) {
-            numInDecimal += digitMap.indexOf(number.charAt(i)) * Math.pow(base, number.length() - i - 1);
+        for (int i = 0; i < digits.length; i++) {
+            numInDecimal += digitMap.indexOf(digits[i]) * Math.pow(base, digits.length - i - 1);
         }
-        boolean powFound = false;
-        int currentPow = 0;
         String result = "";
-        int tempNum = Integer.parseInt(number);
-        int newDigit = 0;
-        while (!powFound) {
-            if (Math.pow(base, currentPow) > numInDecimal) {
-                powFound = true;
-            }
-            else {
-                currentPow++;
-            }
+        while (numInDecimal != 0) {
+            result = digitMap.charAt(numInDecimal % newBase) + result;
+            numInDecimal = numInDecimal / newBase;
         }
-        for (int i = currentPow - 1; i >= 0 ; i--) {
-            newDigit = tempNum / (int) (Math.pow(base, i));
-            result += newDigit;
-            tempNum -= newDigit * (int) (Math.pow(base, i));
-        }
-        return Integer.parseInt(result);
-    }
-    public int convertToDecimal() {
-        return convertToBase(digits, base, 10);
+        return result;
     }
 
-    public int convertToBinary() {
-        return convertToBase(digits, base, 2);
+    public String convertToDecimal() {
+        return convertToBase(10);
     }
 
-    public int convertToOctal() {
-        return convertToBase(digits, base, 8);
+    public String convertToBinary() {
+        return convertToBase(2);
+    }
+
+    public String convertToOctal() {
+        return convertToBase(8);
+    }
+
+    public String convertToHex() {
+        return convertToBase(16);
     }
 }
 
